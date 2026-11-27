@@ -95,7 +95,9 @@ just dev up web
 
 ## AI in development
 
-tether was partly developed using AI. While tether was my first project where I decieded to lean more heavily into AI coding agents. I had never "vibe-coded" before and I have a lot to say about the quaility of their output. Blog post soon (tm).
+tether was partly developed using AI. While tether was my first project where I decieded to lean
+more heavily into AI coding agents. I had never "vibe-coded" before and I have a lot to say about
+the quaility of their output. Blog post soon (tm).
 
 ## Licence
 

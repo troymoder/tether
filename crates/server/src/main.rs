@@ -43,11 +43,18 @@ use tokio::net::TcpListener;
 use tokio::signal::unix::{SignalKind, signal};
 
 use crate::app::App;
-use crate::settings::{Flags, Settings};
+use crate::settings::{Command, Flags, Settings};
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let flags = <Flags as clap::Parser>::parse();
+
+    if let Some(Command::Config) = flags.command {
+        print!("{}", settings::listed(&flags)?);
+
+        return Ok(());
+    }
+
     let mut settings = Settings::read(&flags)?;
     // str0m warns about the data it drops as channels close, which is normal
     // here. Only its errors are shown unless the filter names `str0m`.

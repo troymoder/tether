@@ -1,6 +1,7 @@
 //! tetherd's settings come from the `--config` files it is given, each over
 //! the one before, and then from the flags.
 
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use anyhow::{Context, Result, ensure};
@@ -12,6 +13,9 @@ const DEFAULT_STUN: &str = "stun.l.google.com:19302";
 #[derive(clap::Parser, Serialize)]
 #[command(version, about = "Serves tether's page and the devices it shows")]
 pub(crate) struct Flags {
+    #[command(subcommand)]
+    #[serde(skip)]
+    pub(crate) command: Option<Command>,
     /// The port it serves on.
     #[serde(skip_serializing_if = "Option::is_none")]
     port: Option<u16>,
@@ -75,6 +79,12 @@ pub(crate) struct Flags {
     log: Option<String>,
 }
 
+#[derive(clap::Subcommand)]
+pub(crate) enum Command {
+    /// Prints the settings the config files and flags add up to, and exits.
+    Config,
+}
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Settings {
@@ -96,18 +106,32 @@ pub(crate) struct Settings {
 
 impl Settings {
     pub(crate) fn read(flags: &Flags) -> Result<Self> {
-        let mut sources = config::Config::builder();
-
-        for file in &flags.config {
-            sources = sources.add_source(config::File::from(file.as_path()));
-        }
-
-        sources
-            .add_source(config::Config::try_from(flags)?)
-            .build()?
-            .try_deserialize()
-            .context("invalid settings")
+        merged(flags)?.try_deserialize().context("invalid settings")
     }
+}
+
+fn merged(flags: &Flags) -> Result<config::Config> {
+    let mut sources = config::Config::builder();
+
+    for file in &flags.config {
+        sources = sources.add_source(config::File::from(file.as_path()));
+    }
+
+    Ok(sources
+        .add_source(config::Config::try_from(flags)?)
+        .build()?)
+}
+
+/// The merged settings as a config file would hold them. They are not checked
+/// first, so a misspelled or missing one shows as it was given. JSON writes a
+/// string, a number and a list the way TOML does.
+pub(crate) fn listed(flags: &Flags) -> Result<String> {
+    let settings: BTreeMap<String, serde_json::Value> = merged(flags)?.try_deserialize()?;
+
+    Ok(settings
+        .iter()
+        .map(|(name, value)| format!("{name} = {value}\n"))
+        .collect())
 }
 
 pub(crate) fn stun(said: Option<String>) -> Option<String> {
@@ -196,9 +220,15 @@ mod tests {
             config.to_str().unwrap(),
         ]);
         let settings = Settings::read(&flags).unwrap();
+        let listed = listed(&flags).unwrap();
 
         std::fs::remove_dir_all(&folder).unwrap();
 
+        assert_eq!(
+            listed,
+            "android_helper = \"/dex\"\norigins = [\"localhost:5175\"]\nport = 3\n\
+             scrcpy_server = \"/jar\"\nvcam = \"/vcam\"\n"
+        );
         assert_eq!(settings.port, 3);
         assert_eq!(settings.scrcpy_server, std::path::Path::new("/jar"));
         assert_eq!(

@@ -100,6 +100,9 @@
           inherit dev;
           # The SDK dev's tetherd runs emulators from, and the modules' default.
           android-sdk = android.sdk;
+          # tetherd as dev runs it, with that SDK, so its emulators work:
+          # `nix run .#tetherd -- <port>`.
+          tetherd = server.default.override {inherit (android) sdk;};
         }
         // lib.optionalAttrs linux {
           inherit (vcam) vcam;
