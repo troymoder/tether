@@ -1,0 +1,32 @@
+[package]
+name = "vcam"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+# The cdylib is loaded into the emulator with LD_PRELOAD (src/lib.rs). The rlib
+# only makes cargo build the cdylib before tests/shim.rs preloads it. The test
+# does not link the crate, so the hooks stay out of the test binary.
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+workspace-hack = { version = "0.1", path = "../workspace-hack" }
+
+# V4L2 exists only on Linux and src/lib.rs refuses other targets. Keeping
+# these Linux-only stops cargo-hakari from unifying them into the page's build.
+[target.'cfg(target_os = "linux")'.dependencies]
+dlsym = "0.1.0"
+libc = "0.2"
+memmap2 = "0.9.12"
+rustix = { version = "1.1.6", features = ["net", "fs", "time", "event", "process", "param", "std"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", default-features = false, features = ["registry", "std"] }
+vcam-wire.workspace = true
+
+[target.'cfg(target_os = "linux")'.build-dependencies]
+bindgen = "0.73.2"
