@@ -1,0 +1,250 @@
+.data {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	h1,
+	p {
+		margin: 0;
+	}
+
+	> .row {
+		flex: none;
+		display: flex;
+		gap: 8px;
+
+		> .app {
+			flex: 1;
+			min-width: 0;
+		}
+
+		> .side[aria-pressed="true"] {
+			background: var(--chosen);
+		}
+	}
+}
+
+/* The tables go over the query where, beside it, the result would get less
+   than its columns need. */
+.inspector {
+	flex: 1;
+	min-height: 0;
+	container: db / size;
+
+	> div {
+		height: 100%;
+		display: flex;
+		gap: 12px;
+	}
+
+	@include narrower(tables, db) {
+		> div {
+			flex-direction: column;
+		}
+
+		.stores {
+			width: auto;
+			height: 190px;
+		}
+	}
+}
+
+.stores {
+	flex: none;
+	box-sizing: border-box;
+	width: 210px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+
+	&.hidden {
+		display: none;
+	}
+
+	> div:first-child {
+		flex: none;
+		padding: 6px;
+		border-bottom: 1px solid var(--line);
+		display: flex;
+	}
+
+	input {
+		box-sizing: border-box;
+		flex: 1;
+		min-width: 0;
+		height: 30px;
+		padding: 0 10px;
+		background: var(--bg);
+		font-size: 13px;
+	}
+
+	> div:last-child {
+		flex: 1;
+		min-height: 0;
+		padding: 4px;
+		font-size: 13px;
+		overflow: hidden auto;
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+		scrollbar-color: var(--line) transparent;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+	}
+
+	.part {
+		flex: none;
+		padding: 6px 8px 2px;
+		color: var(--muted);
+		font-size: $text-caption;
+	}
+
+	button {
+		flex: none;
+		padding: 6px 8px;
+		border: 0;
+		border-radius: $radius;
+		background: none;
+		color: var(--muted);
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+
+		span {
+			flex: 1;
+			@include truncated;
+		}
+	}
+
+	.file {
+		&.folds {
+			padding-left: 6px;
+			color: var(--text);
+			font-weight: 500;
+		}
+
+		svg {
+			flex: none;
+			width: 12px;
+			height: 12px;
+			stroke-width: 2;
+		}
+	}
+
+	.table {
+		padding-left: 24px;
+	}
+
+	.table.open,
+	.file:not(.folds).open {
+		background: var(--chosen);
+		color: var(--text);
+		font-weight: 500;
+	}
+
+	code {
+		flex: none;
+		color: var(--muted);
+		font: 400 $text-caption $mono;
+	}
+}
+
+.asked {
+	flex: 1;
+	min-width: 0;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	.ask {
+		box-sizing: border-box;
+		flex: none;
+		height: 64px;
+		padding: 8px 10px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--surface);
+		color: inherit;
+		font: $text-small $mono;
+		resize: none;
+	}
+
+	code.ask {
+		color: var(--muted);
+		overflow: hidden;
+		overflow-wrap: anywhere;
+	}
+
+	.row {
+		flex: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	.run {
+		flex: none;
+		min-width: 78px;
+		text-align: center;
+	}
+}
+
+.grid {
+	flex: 1;
+	min-height: 0;
+	scrollbar-gutter: stable;
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	th,
+	td {
+		max-width: 320px;
+		/* 12px between columns and 10px at the row's ends. */
+		padding: 5px 6px;
+		overflow: hidden;
+		text-align: left;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		&:first-child {
+			padding-left: 10px;
+		}
+
+		&:last-child {
+			padding-right: 10px;
+		}
+	}
+
+	th {
+		padding-top: 6px;
+		padding-bottom: 6px;
+		color: var(--muted);
+		font-weight: 400;
+	}
+
+	td.null {
+		color: var(--muted);
+	}
+
+	.wait {
+		/* The space a paragraph has around it, which the shared line
+		   (ui/loadable.rs) takes away. */
+		margin: 1em 0;
+		padding: 12px;
+	}
+
+	.error {
+		color: var(--bad);
+	}
+}

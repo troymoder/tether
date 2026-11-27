@@ -1,0 +1,335 @@
+.row {
+	container: mbar / inline-size;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+
+	@include narrower(460px, mbar) {
+		.upload {
+			width: $control;
+			padding: 0;
+
+			span {
+				display: none;
+			}
+		}
+	}
+}
+
+.upload {
+	box-sizing: border-box;
+	flex: none;
+	height: $control;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+
+	svg {
+		width: 16px;
+		height: 16px;
+	}
+}
+
+.under {
+	position: relative;
+	flex: 1;
+	min-height: 0;
+	margin: 0 -14px -20px 0;
+	container: fsel / inline-size;
+	display: flex;
+	flex-direction: column;
+
+	/* The 72px bottom padding of .tiles already leaves room under the grid. */
+	> .body {
+		margin: 0;
+		padding-bottom: 0;
+		user-select: none;
+	}
+
+	/* This box reaches 14px right and 20px down into the pane's padding,
+	   so the offsets undo that to centre the toolbar on the content. */
+	> [role="toolbar"] {
+		bottom: 20px;
+		left: calc(50% - 7px);
+		max-width: calc(100% - 14px);
+	}
+}
+
+.tiles {
+	position: relative;
+	/* Lets the last row scroll clear of the floating toolbar. */
+	padding-bottom: 72px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+	align-content: start;
+	gap: 8px;
+}
+
+.tile {
+	position: relative;
+	min-width: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+
+	.shown {
+		box-sizing: border-box;
+		min-width: 0;
+		padding: 0;
+		border: 1px solid var(--line);
+		border-radius: $radius-box;
+		background: var(--surface);
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		overflow: hidden;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+
+		> span {
+			position: relative;
+			aspect-ratio: 1;
+			background: var(--chosen);
+			color: var(--muted);
+			font-size: $text-caption;
+			display: grid;
+			place-items: center;
+		}
+
+		img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	&.swept {
+		border-radius: $radius-box;
+		outline: 2px solid var(--accent);
+		outline-offset: -2px;
+	}
+
+	/* The ring is drawn inside so a picked tile keeps its size. */
+	&.picked .shown {
+		border-color: var(--accent);
+		box-shadow: inset 0 0 0 1px var(--accent);
+	}
+
+	.video {
+		position: absolute;
+		bottom: 6px;
+		left: 6px;
+		box-sizing: border-box;
+		width: 20px;
+		height: 20px;
+		padding: 5px;
+		border-radius: 3px;
+		background: #050505;
+		color: #e6e6e6;
+		display: grid;
+		place-items: center;
+	}
+
+	figcaption {
+		padding: 5px 8px;
+		font-size: $text-caption;
+		display: flex;
+		flex-direction: column;
+
+		span:first-child {
+			@include truncated;
+		}
+
+		.size {
+			margin: 0;
+			font-size: $text-caption;
+		}
+	}
+
+	.pick {
+		position: absolute;
+		top: 6px;
+		left: 6px;
+		width: 22px;
+		height: 22px;
+
+		svg {
+			width: 12px;
+			height: 12px;
+			stroke-width: 3;
+		}
+	}
+}
+
+.body:has(.viewer) {
+	position: relative;
+	overflow-y: hidden;
+}
+
+.viewer {
+	position: absolute;
+	right: 0;
+	left: 0;
+	z-index: 4;
+	box-sizing: border-box;
+	height: 100%;
+	padding: 24px;
+	background: color-mix(in srgb, var(--raised) 55%, transparent);
+	display: flex;
+
+	.around {
+		position: absolute;
+		inset: 0;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	> div {
+		position: relative;
+		box-sizing: border-box;
+		width: min(100%, 760px);
+		height: min(100%, 580px);
+		margin: auto;
+		padding: 12px;
+		border: 1px solid var(--line);
+		border-radius: $radius-box;
+		background: var(--surface);
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		.act {
+			flex: none;
+			box-sizing: border-box;
+			height: $control;
+			min-width: 76px;
+			text-align: center;
+
+			&:first-child {
+				min-width: 0;
+				padding: 0 12px 0 8px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		> span {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+		}
+
+		code,
+		.about {
+			margin: 0;
+			@include truncated;
+		}
+
+		code {
+			font: 13px $mono;
+		}
+	}
+
+	.seen {
+		flex: 1;
+		min-height: 0;
+		display: grid;
+		grid-template-columns: $control minmax(0, 1fr) $control;
+		align-items: center;
+		gap: 12px;
+
+		.step {
+			height: 44px;
+		}
+
+		> div {
+			position: relative;
+			height: 100%;
+			min-height: 0;
+			display: grid;
+			place-items: center;
+		}
+
+		.early {
+			width: 100%;
+			height: 100%;
+			border: 0;
+		}
+
+		/* Load and download progress overlays the bottom of the picture, so
+		   the layout does not shift when it appears. */
+		.progress {
+			position: absolute;
+			bottom: 8px;
+			left: 50%;
+			transform: translateX(-50%);
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			pointer-events: none;
+
+			> div {
+				padding: 4px 8px;
+				border: 1px solid var(--line);
+				border-radius: $radius;
+				background: var(--surface);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				white-space: nowrap;
+				font-variant-numeric: tabular-nums;
+			}
+		}
+
+		.meter {
+			position: relative;
+			width: 96px;
+			height: 2px;
+			background: var(--line);
+			overflow: hidden;
+
+			&::after {
+				content: "";
+				position: absolute;
+				inset: 0 auto 0 0;
+				width: var(--filled);
+				background: var(--accent);
+			}
+		}
+
+		img,
+		video {
+			max-width: 100%;
+			max-height: 100%;
+			min-height: 0;
+			box-sizing: border-box;
+			border: 1px solid var(--line);
+			object-fit: contain;
+		}
+
+		.error {
+			color: var(--bad);
+		}
+	}
+}
