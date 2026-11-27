@@ -1,0 +1,18 @@
+.pinned {
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	font: $text-small $mono;
+	overflow: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--line) transparent;
+
+	th,
+	.head {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		border-bottom: 1px solid var(--line);
+		background: var(--surface);
+	}
+}

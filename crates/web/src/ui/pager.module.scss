@@ -1,0 +1,16 @@
+.pager {
+	flex: none;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+
+	/* As wide for any range, so the buttons hold still. */
+	.range {
+		min-width: 104px;
+		margin: 0;
+		text-align: center;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+	}
+}

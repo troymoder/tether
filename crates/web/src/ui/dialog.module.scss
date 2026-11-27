@@ -1,0 +1,26 @@
+/* :where keeps this as weak as an element's rule, so that the class a view
+   gives its dialog goes over it, whatever order the modules come in. */
+:where(.dialog) {
+	box-sizing: border-box;
+	width: min(440px, calc(100vw - 32px));
+	max-height: calc(100vh - 32px);
+	overflow: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--line) transparent;
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	color: inherit;
+
+	/* Only while it is open, or it would be shown shut. */
+	&[open] {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	&::backdrop {
+		background: rgb(0 0 0 / 55%);
+	}
+}

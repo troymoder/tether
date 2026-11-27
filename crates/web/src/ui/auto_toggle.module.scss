@@ -1,0 +1,27 @@
+.auto {
+	color: var(--muted);
+	font-size: $text-small;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+
+	input {
+		width: 14px;
+		height: 14px;
+		margin: 0;
+		accent-color: var(--accent-fill);
+	}
+}
+
+/* The width the Apps view hides its own words at (apps.module.scss). */
+@include narrower(640px) {
+	.words {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+}

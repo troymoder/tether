@@ -1,0 +1,127 @@
+.button {
+	box-sizing: border-box;
+	height: $control;
+	padding: 0 14px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+
+	&:not(:disabled):hover {
+		background: var(--chosen);
+	}
+
+	&.blue {
+		padding: 0 16px;
+		border-color: var(--accent);
+		background: var(--accent-fill);
+		color: var(--on-accent);
+		font-weight: 500;
+
+		&:not(:disabled):hover {
+			background: color-mix(in srgb, var(--accent-fill) 85%, var(--text));
+		}
+	}
+
+	&.red {
+		border-color: var(--bad);
+		background: none;
+		color: var(--bad);
+
+		&:not(:disabled):hover {
+			background: color-mix(in srgb, var(--bad) 14%, transparent);
+		}
+	}
+
+	/* It comes after the tones, which it has to outweigh. */
+	&.quiet {
+		padding: 0 8px;
+		border-color: transparent;
+		background: none;
+		color: var(--muted);
+		font-size: $text-small;
+
+		&:not(:disabled):hover {
+			background: var(--chosen);
+			color: inherit;
+		}
+
+		&.red:not(:disabled):hover {
+			color: var(--bad);
+		}
+	}
+
+	&:disabled {
+		opacity: 0.45;
+		cursor: default;
+	}
+
+	&.small {
+		height: 28px;
+		padding: 0 10px;
+		font-size: $text-small;
+	}
+}
+
+.icon {
+	box-sizing: border-box;
+	width: $control;
+	height: $control;
+	padding: 7px;
+	border: 0;
+	border-radius: $radius;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+
+	&.start {
+		color: var(--ok);
+	}
+
+	&.stop {
+		color: var(--bad);
+	}
+
+	&:hover,
+	&.active {
+		background: var(--chosen);
+	}
+
+	&.small {
+		width: 26px;
+		height: 26px;
+		padding: 5px;
+		border-radius: $radius;
+		color: var(--muted);
+	}
+
+	&:disabled {
+		color: var(--muted);
+		opacity: 0.45;
+		cursor: default;
+	}
+
+	&:disabled.active,
+	&:disabled:hover {
+		background: none;
+	}
+
+	&.framed {
+		flex: none;
+		padding: 8px;
+		border: 1px solid var(--line);
+		background: var(--surface);
+
+		&.lit {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		&:disabled {
+			opacity: 0.45;
+			cursor: default;
+		}
+	}
+}

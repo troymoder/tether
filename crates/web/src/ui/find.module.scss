@@ -1,0 +1,50 @@
+.find {
+	position: absolute;
+	top: 8px;
+	right: 16px;
+	z-index: 20;
+	box-sizing: border-box;
+	width: min(340px, calc(100% - 32px));
+	height: 40px;
+	padding: 0 4px 0 12px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--chosen);
+	display: flex;
+	align-items: center;
+	gap: 2px;
+
+	input {
+		flex: 1;
+		min-width: 0;
+		margin-right: 6px;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--text);
+		font: 13px $mono;
+		outline: none;
+	}
+
+	/* As wide whatever it says, so that the buttons beside it stay put. */
+	.count {
+		flex: none;
+		min-width: 52px;
+		color: var(--muted);
+		font-size: $text-small;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.step {
+		flex: none;
+		width: $control - 4px;
+		height: $control - 4px;
+		padding: 7px;
+		color: var(--muted);
+	}
+
+	&.none {
+		border-color: var(--bad);
+	}
+}

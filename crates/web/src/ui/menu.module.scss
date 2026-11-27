@@ -1,0 +1,181 @@
+.menu {
+	position: fixed;
+	inset: auto;
+	margin: 0;
+	z-index: 31;
+	box-sizing: border-box;
+	min-width: 220px;
+	max-width: 320px;
+	overflow-y: auto;
+	padding: 3px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	color: var(--text);
+	font-size: 13px;
+
+	/* It takes the focus when it opens so that its keys work. Its rows show
+	   their own focus. */
+	&:focus {
+		outline: none;
+	}
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+
+	&.raised {
+		background: var(--bg);
+		box-shadow: 0 6px 20px rgb(0 0 0 / 35%);
+	}
+}
+
+.heading {
+	padding: 5px 8px 3px;
+	font-size: 12px;
+	font-weight: 500;
+	@include truncated;
+}
+
+.label {
+	padding: 2px 8px;
+	color: var(--muted);
+	font-size: $text-caption;
+}
+
+.rule {
+	height: 1px;
+	margin: 3px 0 -1px;
+	background: var(--line);
+}
+
+.action,
+.row {
+	box-sizing: border-box;
+	flex: none;
+	height: 32px;
+	padding: 0 8px;
+	border: 0;
+	border-radius: 3px;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	white-space: nowrap;
+	cursor: pointer;
+
+	&:hover:not(.dead),
+	&:focus-visible {
+		background: var(--chosen);
+		outline: none;
+	}
+}
+
+.keyed {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+
+	&.red {
+		color: var(--bad);
+	}
+
+	.keys {
+		color: var(--muted);
+		font-size: $text-small;
+	}
+}
+
+/* The row's name and, hovered, its action are in one cell, so that the row
+   is as wide as the wider of the two. */
+.row {
+	display: grid;
+	grid-template-columns: 12px 1fr;
+	align-items: center;
+	column-gap: 10px;
+
+	.mark,
+	.cross {
+		grid-area: 1 / 1;
+		width: 12px;
+		height: 12px;
+		stroke-width: 3;
+		color: var(--accent);
+	}
+
+	.cross {
+		visibility: hidden;
+		color: var(--bad);
+	}
+
+	.is,
+	.does {
+		grid-area: 1 / 2;
+		min-width: 0;
+	}
+
+	.is {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.named {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		svg {
+			flex: none;
+			width: 15px;
+			height: 15px;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.75;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+	}
+
+	.place {
+		padding-left: 16px;
+		color: var(--muted);
+		font-size: $text-small;
+		@include truncated;
+	}
+
+	.does {
+		visibility: hidden;
+		color: var(--accent);
+	}
+
+	&.undoes .does {
+		color: var(--bad);
+	}
+
+	&:hover:not(.dead),
+	&:focus-visible:not(.dead) {
+		.is {
+			visibility: hidden;
+		}
+
+		.does {
+			visibility: visible;
+		}
+	}
+
+	&.undoes:hover:not(.dead),
+	&.undoes:focus-visible:not(.dead) {
+		.mark {
+			visibility: hidden;
+		}
+
+		.cross {
+			visibility: visible;
+		}
+	}
+
+	&.dead {
+		color: var(--muted);
+		cursor: default;
+	}
+}

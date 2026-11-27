@@ -1,0 +1,13 @@
+/* Under the box and over the whole window, so that a press beside the box
+   closes it. */
+.away {
+	all: unset;
+	position: fixed;
+	inset: 0;
+	z-index: 3;
+	cursor: default;
+}
+
+.boxed {
+	z-index: 4;
+}

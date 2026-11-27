@@ -1,0 +1,34 @@
+.named {
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.crumbs {
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+
+	button {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--muted);
+		font: inherit;
+		cursor: pointer;
+
+		&:hover {
+			color: inherit;
+		}
+	}
+
+	span:first-of-type {
+		color: var(--muted);
+	}
+
+	span:last-child {
+		@include truncated;
+	}
+}

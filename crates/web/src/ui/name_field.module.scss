@@ -1,0 +1,49 @@
+/* The hidden `.ghost` copy of the text sets the field's width. */
+.field {
+	box-sizing: border-box;
+	position: relative;
+	display: block;
+	flex: none;
+	min-width: 0;
+	max-width: 100%;
+	height: 28px;
+	padding: 0 8px;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	background: var(--bg);
+	font-size: 14px;
+	cursor: text;
+
+	&:focus-within {
+		border-color: var(--accent);
+	}
+
+	/* The margin takes back the border and padding, so that the text stays
+	   where the name's was. */
+	&.inline {
+		max-width: calc(100% + 18px);
+		margin: 0 -9px;
+		font-size: inherit;
+		font-weight: inherit;
+	}
+
+	.ghost {
+		visibility: hidden;
+		display: block;
+		height: 26px;
+		line-height: 26px;
+		white-space: pre;
+		overflow: hidden;
+		min-width: 2ch;
+	}
+
+	input {
+		all: unset;
+		position: absolute;
+		inset: 0 8px;
+		box-sizing: border-box;
+		color: var(--text);
+		font: inherit;
+		line-height: 26px;
+	}
+}

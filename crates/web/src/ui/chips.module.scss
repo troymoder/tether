@@ -1,0 +1,38 @@
+.heading {
+	padding: 4px 8px 2px;
+	font-size: $text-caption;
+	color: var(--muted);
+}
+
+.chips {
+	padding: 0 8px 4px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+
+	> button {
+		all: unset;
+		box-sizing: border-box;
+		height: 28px;
+		padding: 0 9px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		font: $text-small $mono;
+		white-space: nowrap;
+		color: var(--muted);
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+
+		&[aria-checked="true"] {
+			border-color: var(--accent);
+			background: var(--chosen);
+			color: var(--text);
+		}
+
+		&:disabled {
+			opacity: 0.45;
+			cursor: default;
+		}
+	}
+}
