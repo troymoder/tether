@@ -1,0 +1,6 @@
+# web-sys keeps the WebCodecs decoders, and the float coordinates of mouse
+# events, behind this flag. It is set for every target so that rust-analyzer
+# and `cargo check`, which check the page for this machine, see the same
+# web-sys as the build. RUSTFLAGS would replace it, so it is set here.
+[build]
+rustflags = ["--cfg=web_sys_unstable_apis"]

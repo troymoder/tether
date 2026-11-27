@@ -1,0 +1,23 @@
+# https://docs.rs/cargo-hakari/latest/cargo_hakari/config lists the options.
+
+hakari-package = "workspace-hack"
+
+dep-format-version = "4"
+
+# The workspace uses resolver 3, which hakari treats the same as 2.
+# https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html#cargos-new-feature-resolver
+resolver = "2"
+
+# Each platform gets its own section, so what only one of them needs is not
+# built for the others.
+platforms = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "aarch64-apple-darwin",
+    "wasm32-unknown-unknown",
+]
+
+# workspace-hack alone has to build everything the workspace depends on,
+# because the nix build builds it once per target and reuses that for every
+# crate.
+output-single-feature = true

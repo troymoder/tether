@@ -1,0 +1,9 @@
+[build]
+target = "wasm32-unknown-unknown"
+target-dir = "target/web"
+rustflags = [
+    "-Csymbol-mangling-version=v0",
+    "-Cllvm-args=-dwarf-linkage-names=Abstract",
+    "--cfg=erase_components",
+    "--cfg=web_sys_unstable_apis",
+]
