@@ -1,0 +1,32 @@
+[package]
+name = "ios"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1"
+plist = "1"
+protocol.workspace = true
+futures-channel = "0.3"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+# Only the read and write traits idevice's services take, no runtime.
+tokio = { version = "1", default-features = false }
+tracing = "0.1"
+workspace-hack = { version = "0.1", path = "../workspace-hack" }
+
+# Each target has its own TLS backend. tetherd uses aws-lc, as its str0m
+# does, and the page the pure Rust one with Web Crypto's randomness.
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+idevice = { version = "=0.1.68", default-features = false, features = ["pair","aws-lc","core_device_proxy","tunnel_tcp_stack","rsd","display_stream","notification_proxy","springboardservices", # The developer disk image (ddi.rs), signed by Apple's TSS over HTTP.
+    "cryptexd",] }
+
+[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies]
+idevice = { version = "=0.1.68", default-features = false, features = ["pair", "wasm", "core_device_proxy", "tunnel_tcp_stack", "rsd", "display_stream", "notification_proxy", "springboardservices"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["io-util", "macros", "rt"] }
