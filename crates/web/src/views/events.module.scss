@@ -1,0 +1,232 @@
+.events {
+	.table-frame {
+		position: relative;
+		flex: 1 0 260px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.table-box {
+		flex: 1;
+		min-height: 0;
+	}
+
+	.more {
+		display: flex;
+		justify-content: center;
+	}
+
+	.whole {
+		padding: 10px 12px 12px 106px;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+		background: var(--bg);
+		line-height: 1.5;
+		display: grid;
+		grid-template-columns: max-content minmax(0, 1fr);
+		gap: 3px 14px;
+
+		> span:nth-child(odd) {
+			color: var(--muted);
+		}
+
+		> span:nth-child(even) {
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+		}
+
+		.result {
+			color: var(--ok);
+		}
+
+		&.failed .result {
+			color: var(--bad);
+		}
+	}
+
+	.search {
+		flex: none;
+		box-sizing: border-box;
+		height: $control;
+		padding: 0 10px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--surface);
+		cursor: text;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		svg {
+			flex: none;
+			width: 15px;
+			height: 15px;
+			color: var(--muted);
+		}
+
+		input {
+			flex: 1;
+			min-width: 0;
+			padding: 0;
+			border: 0;
+			background: none;
+			outline: none;
+		}
+	}
+
+	.table {
+		> p {
+			margin: 0;
+			padding: 8px 12px;
+		}
+	}
+
+	.row {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 3px 12px;
+		border: 0;
+		background: none;
+		font: inherit;
+		text-align: left;
+		display: grid;
+		grid-template-columns: 84px 72px 80px minmax(0, 1fr) 110px 110px;
+		gap: 10px;
+
+		> span {
+			color: var(--muted);
+			@include truncated;
+		}
+
+		.message {
+			color: var(--text);
+		}
+
+		.result {
+			color: var(--ok);
+		}
+
+		&.failed .result,
+		&.failed .message {
+			color: var(--bad);
+		}
+	}
+
+	button.row {
+		cursor: pointer;
+
+		&.on {
+			background: var(--chosen);
+		}
+	}
+
+	/* The headers come after .row, which they are too, to take its padding
+	   off and to put back the border and the background that .row clears. */
+	.heads {
+		padding-top: 0;
+		padding-bottom: 0;
+		border-bottom: 1px solid var(--line);
+		background: var(--surface);
+		font-family: var(--sans);
+
+		.head {
+			display: flex;
+		}
+	}
+}
+
+.events .head {
+	&.plain {
+		align-items: center;
+	}
+
+	> button {
+		min-width: 0;
+		height: 32px;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--muted);
+		font: inherit;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		span {
+			@include truncated;
+		}
+
+		svg {
+			flex: none;
+			width: 11px;
+			height: 11px;
+			stroke-width: 2;
+		}
+
+		&.lit {
+			color: var(--accent);
+		}
+	}
+}
+
+@mixin under {
+	position: absolute;
+	top: 36px;
+}
+
+/* The offsets follow the column widths of `.row`. The last two are placed
+   from the right edge, so their lists open towards the middle. */
+.events {
+	.under-result {
+		@include under;
+		left: 106px;
+	}
+
+	.under-what {
+		@include under;
+		left: 188px;
+	}
+
+	.under-device {
+		@include under;
+		right: 132px;
+	}
+
+	.under-place {
+		@include under;
+		right: 12px;
+	}
+
+	.list {
+		box-sizing: border-box;
+		min-width: 150px;
+		max-height: 320px;
+		padding: 3px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--surface);
+		overflow: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+
+		button {
+			flex: none;
+			height: $control;
+			padding: 0 8px;
+			border: 0;
+			border-radius: 3px;
+			background: none;
+			color: var(--text);
+			font: $text var(--sans);
+			text-align: left;
+			white-space: nowrap;
+			cursor: pointer;
+
+			&[aria-selected="true"] {
+				background: var(--chosen);
+			}
+		}
+	}
+}

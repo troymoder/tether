@@ -1,0 +1,49 @@
+.view {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.actions {
+	flex: none;
+	margin: 0;
+	display: flex;
+	gap: 8px;
+}
+
+.shell {
+	position: relative;
+	box-sizing: border-box;
+	flex: 1;
+	min-height: 260px;
+	padding: 8px 10px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--raised);
+	overflow: hidden;
+
+	> :global(.terminal),
+	:global(.xterm) {
+		height: 100%;
+	}
+
+	/* The space left under the last row shows the frame's background, which
+	   xterm would otherwise paint black. */
+	:global(.xterm) :global(.xterm-viewport),
+	:global(.xterm) :global(.xterm-scrollable-element) {
+		background-color: transparent !important;
+	}
+
+	.said {
+		position: absolute;
+		right: 10px;
+		bottom: 8px;
+		margin: 0;
+		padding: 2px 8px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--bg);
+		color: var(--muted);
+		font: $text-small $mono;
+	}
+}

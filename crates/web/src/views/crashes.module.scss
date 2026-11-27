@@ -1,0 +1,90 @@
+/* The list is as long as it is, and the pane body scrolls it and the open
+   crash's text together. */
+.view {
+	p {
+		margin: 0;
+	}
+
+	pre {
+		flex: 1 0 auto;
+		box-sizing: border-box;
+		min-height: 260px;
+		margin: 0;
+		padding: 12px;
+		border: 1px solid var(--line);
+		border-radius: $radius-box;
+		background: var(--surface);
+		font: #{$text-small}/1.5 $mono;
+		overflow: auto;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		user-select: text;
+	}
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+
+	input {
+		flex: 1;
+		min-width: 120px;
+	}
+
+	.kind {
+		width: 180px;
+	}
+}
+
+.list {
+	overflow: hidden;
+}
+
+/* The time is always the full date, one length, so max-content lines the
+   kinds up. */
+.crash {
+	padding: 8px 12px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	display: grid;
+	grid-template-columns: max-content 130px minmax(0, 1fr);
+	align-items: center;
+	gap: 12px;
+	cursor: pointer;
+
+	+ .crash {
+		border-top: 1px solid var(--line);
+	}
+
+	&.front {
+		background: var(--chosen);
+	}
+
+	code {
+		font: #{$text-small} $mono;
+		@include truncated;
+	}
+
+	.when {
+		color: var(--muted);
+	}
+}
+
+.crumb {
+	padding: 2px 6px;
+	border: 0;
+	border-radius: $radius;
+	background: none;
+	color: var(--accent);
+	font: inherit;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--chosen);
+	}
+}
