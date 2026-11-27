@@ -1,0 +1,279 @@
+/* The columns are fixed and the figures use tabular digits, so changing
+   numbers do not move the layout. */
+.network {
+	container: netw / inline-size;
+
+	.sockets {
+		font-size: 13px;
+	}
+
+	.socket {
+		border-top: 1px solid var(--line);
+		display: flex;
+		flex-direction: column;
+
+		&.open {
+			background: var(--bg);
+		}
+	}
+
+	.graph {
+		width: 100%;
+		height: 28px;
+		display: block;
+
+		svg {
+			width: 100%;
+			height: 100%;
+			display: block;
+			fill: none;
+			stroke-width: 1;
+		}
+
+		polyline,
+		path {
+			vector-effect: non-scaling-stroke;
+		}
+
+		.baseline {
+			stroke: var(--line);
+		}
+
+		.down {
+			stroke: var(--accent);
+			stroke-width: 1.25;
+		}
+
+		.up {
+			stroke: var(--muted);
+		}
+
+		.latency {
+			stroke: var(--warn);
+			stroke-width: 1;
+		}
+
+		.loss {
+			stroke: var(--bad);
+			stroke-width: 1;
+		}
+
+		&.large {
+			position: relative;
+			width: 100%;
+			height: 96px;
+
+			> span:first-child {
+				height: 100%;
+				display: block;
+			}
+		}
+	}
+
+	.whole {
+		padding: 4px 12px 12px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		/* Tighter rows than the shared .kv list in ui.module.scss. */
+		> dl {
+			background: var(--bg);
+
+			dt {
+				padding: 6px 16px 6px 12px;
+			}
+
+			dd {
+				padding: 6px 12px;
+			}
+		}
+	}
+
+	.cursor {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 1px;
+		background: var(--text);
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	.tip {
+		position: absolute;
+		bottom: calc(100% + 4px);
+		z-index: 6;
+		padding: 2px 6px;
+		border: 1px solid var(--line);
+		border-radius: 3px;
+		background: var(--chosen);
+		font: $text-caption $mono;
+		white-space: pre;
+		pointer-events: none;
+	}
+
+	.legend {
+		color: var(--muted);
+		font-size: $text-small;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+
+		> span {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		span span {
+			width: 12px;
+			height: 2px;
+			background: var(--muted);
+		}
+
+		.down {
+			background: var(--accent);
+		}
+
+		.latency {
+			background: var(--warn);
+		}
+
+		.loss {
+			background: var(--bad);
+		}
+	}
+}
+
+.row {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px 12px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	display: grid;
+	/* The graph column shrinks first. The other columns, gaps and padding
+	   take 608px, and the rows wrap to three lines only under 700px. */
+	grid-template-columns: minmax(80px, 1fr) minmax(80px, 1fr) 104px 96px 80px 72px minmax(0, 120px);
+	align-items: center;
+	gap: 12px;
+
+	&.head {
+		padding: 6px 12px;
+		color: var(--muted);
+		font-size: $text-small;
+		cursor: default;
+	}
+
+	.figure {
+		text-align: right;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.from,
+	.to {
+		@include truncated;
+	}
+
+	/* The arrow between the endpoints shows only in the narrow layout, where
+	   both sit on one line. */
+	.to > span {
+		display: none;
+		color: var(--muted);
+	}
+
+	code {
+		color: var(--muted);
+		font: $text-small $mono;
+		white-space: nowrap;
+	}
+
+	.state {
+		color: var(--ok);
+		font-size: $text-small;
+		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+
+		&.off {
+			color: var(--bad);
+		}
+
+		> span {
+			width: 7px;
+			height: 7px;
+			background: currentColor;
+		}
+	}
+}
+
+@include narrower(700px, netw) {
+	.row {
+		grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto;
+		grid-template-areas:
+			"from to state"
+			"down up kind"
+			"graph graph graph";
+		gap: 4px 12px;
+
+		&.head {
+			display: none;
+		}
+
+		.from {
+			grid-area: from;
+		}
+
+		.to {
+			grid-area: to;
+		}
+
+		.to > span {
+			display: inline;
+		}
+
+		.state {
+			grid-area: state;
+			justify-self: end;
+		}
+
+		.kind {
+			grid-area: kind;
+			justify-self: end;
+		}
+
+		.down {
+			grid-area: down;
+			text-align: left;
+		}
+
+		.up {
+			grid-area: up;
+			text-align: left;
+		}
+
+		.graph {
+			grid-area: graph;
+			width: 100%;
+		}
+	}
+
+	/* An opened row hides its small graph, since the large one sits right
+	   under it. */
+	.socket.open .row {
+		grid-template-areas:
+			"from to state"
+			"down up kind";
+
+		.graph {
+			display: none;
+		}
+	}
+}

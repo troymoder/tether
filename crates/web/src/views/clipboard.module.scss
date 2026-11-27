@@ -1,0 +1,178 @@
+@mixin code-line {
+	@include truncated;
+	font: $text-small $mono;
+}
+
+.clipboard {
+	h1,
+	h2,
+	p {
+		margin: 0;
+	}
+
+	.follow {
+		min-width: 0;
+		color: var(--muted);
+		font-size: $text-small;
+
+		> span {
+			@include truncated;
+		}
+	}
+
+	/* Keeps its line height even when empty. */
+	.line {
+		min-height: 18px;
+	}
+}
+
+.pair {
+	container: clip / inline-size;
+
+	> div {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+
+		@include narrower(clipboard, clip) {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.side {
+		min-width: 0;
+		overflow: hidden;
+
+		> div:first-child {
+			padding: 8px 12px;
+			border-bottom: 1px solid var(--line);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		> div:first-child span:first-child {
+			min-width: 0;
+			font-weight: 500;
+			@include truncated;
+		}
+
+		> div:last-child {
+			padding: 8px;
+			border-top: 1px solid var(--line);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+		}
+
+		> div:last-child > span {
+			min-width: 0;
+			display: flex;
+			gap: 8px;
+		}
+	}
+
+	.text {
+		box-sizing: border-box;
+		height: 124px;
+		padding: 10px 12px;
+		border: 0;
+		background: none;
+		color: var(--text);
+		font: 13px/1.5 $mono;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		overflow: hidden auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--line) transparent;
+		resize: none;
+		outline: none;
+	}
+
+	.side .act,
+	.side .put,
+	.side .clear {
+		box-sizing: border-box;
+		height: $control;
+		@include truncated;
+
+		&:disabled {
+			opacity: 0.45;
+			cursor: default;
+		}
+	}
+
+	.side .act {
+		padding: 0 14px;
+	}
+
+	.side .put {
+		padding: 0 16px;
+	}
+
+	.side .clear {
+		padding: 0 8px;
+		font-size: inherit;
+	}
+}
+
+.recent-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+
+	> span {
+		@include truncated;
+	}
+}
+
+.recent {
+	flex: 1 0 160px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	overflow: hidden auto;
+	scrollbar-gutter: stable;
+	scrollbar-width: thin;
+	scrollbar-color: var(--line) transparent;
+
+	button {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 6px 12px;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: 64px 96px 70px minmax(0, 1fr);
+		align-items: center;
+		gap: 12px;
+
+		+ button {
+			border-top: 1px solid var(--line);
+		}
+
+		&.on {
+			background: var(--chosen);
+		}
+
+		> span {
+			justify-self: start;
+			white-space: nowrap;
+		}
+	}
+
+	code {
+		@include code-line;
+
+		&:first-child {
+			color: var(--muted);
+		}
+	}
+}

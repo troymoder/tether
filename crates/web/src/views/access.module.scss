@@ -1,0 +1,271 @@
+$line-padding: 10px 12px;
+@mixin hint {
+	padding: $line-padding;
+	font-size: 13px;
+}
+
+.access {
+	container: acc / inline-size;
+
+	.body {
+		gap: 20px;
+	}
+
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+}
+
+.access,
+.general {
+	h2 {
+		margin: 0;
+	}
+}
+
+/* As tall empty as with one row. */
+.asks {
+	min-height: 62px;
+	justify-content: center;
+
+	> p {
+		@include hint;
+	}
+
+	&.waiting {
+		border-color: var(--warn);
+	}
+}
+
+.row {
+	padding: $line-padding;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 4px 12px;
+
+	+ .row {
+		border-top: 1px solid var(--line);
+	}
+
+	.access & > button {
+		height: 28px;
+		padding: 0 6px;
+	}
+
+	&.chosen {
+		background: var(--chosen);
+		box-shadow: inset 2px 0 0 var(--accent);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: -2px;
+	}
+
+	.parts {
+		grid-column: 1 / -1;
+		margin-top: 6px;
+		border: 1px solid var(--line);
+		border-radius: $radius-box;
+		background: var(--bg);
+		display: flex;
+		flex-direction: column;
+
+		> div {
+			padding: 8px 12px;
+			font-size: 13px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		> div + div {
+			border-top: 1px solid var(--line);
+		}
+	}
+}
+
+.name {
+	min-width: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	display: flex;
+	align-items: center;
+	gap: 4px 8px;
+
+	.me {
+		border-color: var(--accent);
+		color: var(--accent);
+		white-space: nowrap;
+	}
+
+	.direct {
+		border-color: var(--ok);
+		color: var(--ok);
+	}
+
+	.offline {
+		color: var(--muted);
+	}
+
+	@include narrower(access-rows, acc) {
+		flex-wrap: wrap;
+	}
+}
+
+/* As tall as the field that renames it, so renaming moves nothing. */
+.title {
+	min-width: 0;
+	max-width: 100%;
+	min-height: 28px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	svg {
+		flex: none;
+		width: 12px;
+		height: 12px;
+		stroke-width: 2;
+	}
+
+	span {
+		@include truncated;
+	}
+
+	@include narrower(access-rows, acc) {
+		flex: 1 1 100%;
+	}
+}
+
+.toggle {
+	flex: none;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--muted);
+	cursor: pointer;
+	display: flex;
+}
+
+.line {
+	grid-column: 1 / -1;
+	min-width: 0;
+	color: var(--muted);
+	font: $text-small $mono;
+	display: flex;
+	gap: 0 12px;
+
+	span:first-child {
+		max-width: 100%;
+		@include truncated;
+	}
+
+	@include narrower(access-rows, acc) {
+		flex-direction: column;
+	}
+}
+
+.lines {
+	> div,
+	> label {
+		padding: $line-padding;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	> .usb {
+		padding: 8px 12px;
+
+		code {
+			color: var(--muted);
+			font: $text-small $mono;
+			@include truncated;
+		}
+
+		button {
+			flex: none;
+			height: $control;
+			padding: 0 8px;
+			font-size: inherit;
+		}
+	}
+
+	.set-up {
+		flex: none;
+		height: $control;
+		padding: 0 14px;
+		background: var(--bg);
+	}
+
+	> * + * {
+		border-top: 1px solid var(--line);
+	}
+
+	> p {
+		@include hint;
+	}
+
+	> * > span:first-child {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.theme {
+		flex: 0 1 216px;
+		min-width: 0;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+
+		button {
+			padding: 0;
+		}
+	}
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+dialog.form {
+	input:not([type="checkbox"]) {
+		background: var(--bg);
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.foot {
+		margin-top: 4px;
+		padding-top: 0;
+		border-top: 0;
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+
+	.file {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+input.mono {
+	font: 13px $mono;
+}
