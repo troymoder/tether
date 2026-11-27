@@ -1,0 +1,50 @@
+{
+	// The plugins are pinned in nix and passed by the `dprint` in the dev shell
+	// (nix/dprint.nix), so this file only holds their settings.
+	"lineWidth": 100,
+	"useTabs": true,
+	"biome": {},
+	"alejandra": {
+		"useTabs": false,
+		"indentWidth": 2
+	},
+	"shfmt": {
+		"associations": [".envrc"]
+	},
+	// cacheKeyFiles lists the config files each formatter would read, so that
+	// adding or changing one formats again.
+	"exec": {
+		"cwd": "${configDir}",
+		"commands": [
+			{
+				"command": "rustfmt --edition 2024",
+				"exts": ["rs"],
+				"cacheKeyFiles": ["rustfmt.toml", "rust-toolchain.toml"]
+			},
+			{
+				"command": "ktlint --stdin --stdin-path={{file_path}} --format --log-level=none",
+				"exts": ["kt", "kts"],
+				"cacheKeyFiles": [".editorconfig"]
+			}
+		]
+	},
+	"markdown": {
+		"textWrap": "always"
+	},
+	"toml": {
+		"useTabs": false,
+		"indentWidth": 4,
+		// Keeps the order the manifests are written in.
+		"cargo.applyConventions": false
+	},
+	"malva": {},
+	"markup": {},
+	"excludes": [
+		"**/node_modules",
+		"**/generated",
+		"**/*-lock.json",
+		// cargo-hakari writes this crate's manifest its own way.
+		"crates/workspace-hack/**",
+		".vscode/settings.json"
+	]
+}
