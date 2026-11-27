@@ -1,0 +1,551 @@
+@mixin step-rule {
+	margin-top: 6px;
+	padding-top: 14px;
+	border-top: 1px solid var(--line);
+}
+
+.body > .cards {
+	margin-bottom: 12px;
+}
+
+.body > .empty {
+	margin: 0;
+	font-size: 13px;
+}
+
+button.add {
+	box-sizing: border-box;
+	padding: 0 12px 0 10px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+
+	svg {
+		flex: none;
+		width: 14px;
+		height: 14px;
+		stroke-width: 2;
+	}
+
+	@include narrower(add-device, find) {
+		flex: none;
+		width: $control;
+		padding: 0;
+		justify-content: center;
+
+		span {
+			display: none;
+		}
+	}
+}
+
+/* Never more across than `--most`, the card count of the longest section
+   (list.rs), so cards do not narrow for empty columns. */
+.cards {
+	--least: 240px;
+	--widest: 400px;
+	max-width: calc(var(--most, 1) * var(--widest) + (var(--most, 1) - 1) * 8px);
+	display: grid;
+	grid-template-columns:
+		repeat(
+			auto-fill,
+			minmax(
+				min(100%, max(var(--least), (100% - (var(--most, 1) - 1) * 8px) / var(--most, 1))),
+				1fr
+			)
+		);
+	gap: 8px;
+}
+
+.card {
+	box-sizing: border-box;
+	min-width: 0;
+	padding: 12px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	&.found {
+		border-style: dashed;
+		background: none;
+	}
+
+	&.picked {
+		border-style: solid;
+		border-color: var(--accent);
+	}
+
+	&.away {
+		background: none;
+		color: var(--muted);
+	}
+
+	/* An empty line keeps the card as tall as the others. */
+	p:empty::before {
+		content: "\00a0";
+	}
+
+	.new {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	.line {
+		min-width: 0;
+		display: flex;
+		justify-content: space-between;
+		gap: 8px;
+
+		code:last-child {
+			flex: none;
+		}
+	}
+
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	strong {
+		font-size: $text;
+		font-weight: 600;
+	}
+
+	code,
+	p {
+		display: block;
+		margin: 0;
+		color: var(--muted);
+		font-size: $text-small;
+		@include truncated;
+	}
+
+	code {
+		font-family: $mono;
+	}
+
+	/* The row is as tall as the field that renames it, so nothing moves
+	   when it opens. */
+	.who {
+		min-width: 0;
+		height: 28px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		strong {
+			@include truncated;
+		}
+	}
+
+	.renaming {
+		min-width: 0;
+		font-size: $text;
+		font-weight: 600;
+		display: flex;
+	}
+}
+
+.narrow {
+	container: find / inline-size;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	button.add {
+		margin-left: auto;
+		height: $control;
+	}
+
+	input[type="search"] {
+		box-sizing: border-box;
+		flex: 1 1 0;
+		min-width: 0;
+		max-width: 280px;
+	}
+}
+
+.states {
+	position: relative;
+	flex: none;
+}
+
+.filter svg {
+	display: block;
+}
+
+.states-list {
+	button {
+		min-height: $control;
+		padding: 4px 10px 4px 8px;
+		border: 0;
+		border-radius: 3px;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		white-space: nowrap;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.check {
+		box-sizing: border-box;
+		flex: none;
+		width: 14px;
+		height: 14px;
+		border: 1px solid var(--line);
+		border-radius: 3px;
+		color: transparent;
+		display: grid;
+		place-items: center;
+
+		svg {
+			width: 10px;
+			height: 10px;
+			stroke-width: 3;
+		}
+	}
+
+	[aria-checked="true"] .check {
+		border-color: var(--accent);
+		background: var(--accent-fill);
+		color: var(--on-accent);
+	}
+
+	.kind {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		span:empty {
+			display: none;
+		}
+	}
+
+	.kind span + span,
+	.count {
+		color: var(--muted);
+		font-size: $text-caption;
+	}
+
+	.count {
+		font-size: $text-small;
+	}
+}
+
+.connect {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	h3 {
+		margin: 0;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	p {
+		margin: 0;
+		color: var(--muted);
+		font-size: $text-small;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.paired {
+		align-self: flex-start;
+	}
+
+	.usb {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px 12px;
+
+		> button.choose {
+			background: var(--bg);
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+
+		code {
+			color: var(--muted);
+			font: $text-small $mono;
+		}
+	}
+
+	.on-phone {
+		font-size: 13px;
+
+		span {
+			color: var(--muted);
+		}
+	}
+
+	.ways {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 16px;
+		align-items: stretch;
+
+		> div {
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		> div > span:first-child {
+			font-size: 12px;
+			color: var(--muted);
+		}
+
+		form {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.place {
+			grid-template-columns: minmax(0, 1fr) 76px;
+		}
+
+		.code {
+			align-self: stretch;
+			margin: 0;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			gap: 4px;
+
+			span {
+				height: 34px;
+				font-size: 15px;
+			}
+		}
+
+		.foot {
+			margin-top: auto;
+		}
+	}
+
+	/* Scanners need dark on light, so the code sits on a white tile whatever
+	   the theme. */
+	.code-card {
+		flex: none;
+		width: 168px;
+		box-sizing: border-box;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: var(--surface);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.code-tile {
+		position: relative;
+		margin: 6px;
+		border-radius: 5px;
+		overflow: hidden;
+		background: #ffffff;
+
+		/* The code is drawn by its fills, so it drops the stroke that
+		   base.scss gives the page's line icons. */
+		svg {
+			width: 154px;
+			height: 154px;
+			display: block;
+			stroke: none;
+		}
+
+		svg.covered {
+			filter: blur(4px);
+			opacity: 0.45;
+		}
+	}
+
+	.code-over {
+		all: unset;
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		color: #0f1724;
+		font-size: 12px;
+		text-align: center;
+	}
+
+	button.code-over {
+		cursor: pointer;
+	}
+
+	.code-new {
+		height: 30px;
+		padding: 0 12px;
+		border-radius: 4px;
+		background: #0f1724;
+		color: #ffffff;
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+	}
+
+	.code-spin {
+		box-sizing: border-box;
+		width: 26px;
+		height: 26px;
+		border: 3px solid rgb(15 23 36 / 15%);
+		border-top-color: #0f1724;
+		border-radius: 50%;
+		animation: spin 0.9s linear infinite;
+	}
+
+	.code-foot {
+		height: 28px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		font-size: 12px;
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+		color: var(--muted);
+
+		&.bad {
+			color: var(--bad);
+		}
+
+		&.ok {
+			color: var(--ok);
+		}
+
+		.mark {
+			flex: none;
+			width: 7px;
+			height: 7px;
+			background: currentColor;
+		}
+	}
+
+	.via {
+		align-self: flex-start;
+	}
+
+	h3.next,
+	p.next {
+		@include step-rule;
+	}
+
+	.from {
+		color: var(--text);
+		font-size: $text;
+	}
+
+	.place {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 120px;
+		gap: 8px;
+
+		input {
+			box-sizing: border-box;
+			width: 100%;
+			font: 13px $mono;
+		}
+	}
+
+	.between {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	.between.last {
+		@include step-rule;
+
+		p {
+			flex: 1;
+			min-width: 0;
+		}
+	}
+
+	/* Fields in the popup take the page background so they stand off the
+	   popup's surface, under the pointer too. */
+	input:not([type="checkbox"]),
+	.from > button {
+		background: var(--bg);
+	}
+
+	.foot {
+		margin-top: 4px;
+		padding-top: 0;
+		border-top: 0;
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+}
+
+.code {
+	position: relative;
+	align-self: center;
+	margin: 4px 0;
+	display: grid;
+	grid-template-columns: repeat(6, 40px);
+	gap: 6px;
+
+	span {
+		box-sizing: border-box;
+		height: 44px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--bg);
+		color: var(--text);
+		font: 18px $mono;
+		display: grid;
+		place-items: center;
+	}
+
+	span.at {
+		border-color: var(--accent);
+	}
+
+	input {
+		position: absolute;
+		inset: 0;
+		box-sizing: border-box;
+		width: 100%;
+		opacity: 0;
+		cursor: text;
+	}
+}
+
+.foot .back {
+	margin-right: auto;
+}

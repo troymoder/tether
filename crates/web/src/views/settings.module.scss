@@ -1,0 +1,140 @@
+form.settings {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	/* A setting's heading sits 4px above its field. The -8px margin offsets
+	   the form's 12px gap. */
+	h2 {
+		margin: 0 0 -8px;
+		font-weight: 400;
+	}
+
+	h2.part {
+		margin: 8px 0 0;
+		font-weight: 500;
+	}
+
+	.name > span {
+		width: 100%;
+		height: $control;
+		padding: 0 10px;
+		background: var(--surface);
+
+		> input {
+			inset: 0 10px;
+		}
+	}
+
+	/* Only the fields of a read only emulator are dimmed. The headings stay
+	   as they are. */
+	fieldset {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+
+		&:disabled :is(button, input) {
+			opacity: 0.6;
+			cursor: default;
+		}
+	}
+
+	.pick {
+		width: 100%;
+	}
+
+	input:not([type="checkbox"]) {
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	.foot {
+		margin-top: auto;
+		padding-top: 12px;
+		border-top: 1px solid var(--line);
+		display: flex;
+		gap: 8px;
+	}
+
+	&.fresh .foot {
+		margin-top: 4px;
+		padding-top: 0;
+		border-top: 0;
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+}
+
+.caution {
+	margin: 0;
+	padding: 8px 12px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	font-size: 13px;
+
+	&.warn {
+		border-color: var(--warn);
+	}
+}
+
+.popup-field {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px 10px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	&:hover {
+		background: var(--chosen);
+	}
+
+	svg {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		color: var(--muted);
+	}
+
+	.chosen {
+		flex: 1;
+		@include truncated;
+	}
+}
+
+.camera-box {
+	max-width: 360px;
+}
+
+.kinds {
+	flex: none;
+
+	button {
+		flex: 1 1 0;
+	}
+}
+
+/* In the popup that adds a device, the fields use the page background so
+   they stand out from the popup, on hover too. */
+form.fresh input:not([type="checkbox"]),
+.fresh .pick > button,
+.fresh button.popup-field {
+	background: var(--bg);
+}
+
+.fresh h2:first-of-type {
+	margin-top: 0;
+}
