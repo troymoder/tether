@@ -1,0 +1,27 @@
+[package]
+name = "quicktime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+workspace-hack = { version = "0.1", path = "../workspace-hack" }
+
+# Only on the systems tetherd runs on, as tetherd's own, so that hakari
+# leaves the USB stack and tokio out of the page's WebAssembly.
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies]
+anyhow = "1"
+nusb = "0.1"
+bytes = "1"
+scuffle-bytes-util = "0.1"
+scuffle-expgolomb = "0.1"
+scuffle-h264 = "0.2"
+tokio = { version = "1", features = ["time"] }
+tracing = "0.1"
+
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
