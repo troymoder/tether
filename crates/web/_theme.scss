@@ -1,0 +1,63 @@
+@use "sass:map";
+
+// stylance puts this file before every module, so nothing here may emit CSS
+// by itself. The colours are custom properties in base.scss, which lets light
+// and dark switch while the page runs.
+
+$control: 34px;
+
+$radius: 4px;
+$radius-box: 6px;
+
+$text: 14px;
+$text-small: 12px;
+$text-caption: 11px;
+$mono: var(--mono);
+
+$breakpoints: (
+	add-device: 360px,
+	device-states: 340px,
+	key-values: 420px,
+	access-rows: 520px,
+	files-toolbar: 520px,
+	clipboard: 520px,
+	system-apps: 460px,
+	menu: 560px,
+	location: 560px,
+	platform: 620px,
+	tables: 684px
+);
+
+@mixin narrower($what, $container: null) {
+	$width: $what;
+
+	@if map.has-key($breakpoints, $what) {
+		$width: map.get($breakpoints, $what);
+	}
+
+	@container #{$container} (width < #{$width}) {
+		@content;
+	}
+}
+
+// `across` (base.scss) hardcodes this width and the 30px piece. `--bar-piece`
+// and `--bar-line` recolour the bar.
+@mixin moving-bar {
+	width: 96px;
+	height: 2px;
+	background: linear-gradient(var(--bar-piece, var(--accent)), var(--bar-piece, var(--accent)))
+		no-repeat 0 0 / 30px 100% var(--bar-line, var(--line));
+	animation: across 1.6s linear infinite;
+
+	@media (prefers-reduced-motion: reduce) {
+		background-position: 33px 0;
+		animation: none;
+	}
+}
+
+@mixin truncated {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

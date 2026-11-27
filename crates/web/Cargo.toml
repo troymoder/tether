@@ -1,0 +1,47 @@
+[package]
+name = "web"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+# stylance-cli puts this prelude at the top of every module. sass finds
+# _theme.scss on the load path package.nix gives it.
+[package.metadata.stylance]
+folders = ["./src/"]
+extensions = [".module.scss"]
+scss_prelude = '@use "theme" as *;'
+
+[dependencies]
+adb.workspace = true
+android.workspace = true
+ios.workspace = true
+base64 = "0.22"
+bitflags = "2"
+async-trait = "0.1"
+console_error_panic_hook = "0.1"
+libadb = { version = "0.9", default-features = false, features = ["split", "keys"] }
+embedded-io = "0.6"
+embedded-io-async = "0.6"
+futures-channel = "0.3"
+futures-util = { version = "0.3", default-features = false }
+indexed_db_futures = { version = "0.6", features = ["serde"] }
+js-sys = "0.3"
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+leptos = { version = "0.8", features = ["csr"] }
+percent-encoding = "2"
+protocol.workspace = true
+reactive_stores = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+stylance = "0.8.4"
+# Pinned to the wasm-bindgen program in package.nix, which has to match it.
+wasm-bindgen = "=0.2.130"
+unicode-width = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3", features = ["AudioData", "AudioDecoder", "AudioDecoderConfig", "AudioDecoderInit", "Blob", "BlobEvent", "CanvasRenderingContext2d", "Clipboard", "CodecState", "console", "Crypto", "CryptoKey", "CryptoKeyPair", "ClipboardEvent", "CssStyleDeclaration", "DataTransfer", "DataTransferItem", "DataTransferItemList", "DedicatedWorkerGlobalScope", "DisplayMediaStreamConstraints", "DomRect", "DomTokenList", "DragEvent", "EcKeyGenParams", "EcdsaParams", "Element", "EncodedVideoChunk", "EncodedVideoChunkInit", "EncodedVideoChunkType", "Event", "EventTarget", "File", "FileSystemDirectoryHandle", "FileSystemFileHandle", "FileSystemGetDirectoryOptions", "FileSystemGetFileOptions", "FileSystemRemoveOptions", "FileSystemWritableFileStream", "FocusEvent", "FileList", "HtmlAnchorElement", "ImageData", "HtmlCanvasElement", "HtmlCollection", "HtmlDialogElement", "HtmlElement", "HtmlImageElement", "ImageBitmap", "HtmlInputElement", "HtmlMediaElement", "HtmlSelectElement", "HtmlVideoElement", "KeyboardEvent", "LatencyMode", "Location", "MediaDeviceInfo", "MediaDeviceKind", "MediaDevices", "MediaQueryList", "EncodedAudioChunk", "EncodedAudioChunkInit", "EncodedAudioChunkType", "MediaRecorder", "MediaStream", "MediaStreamConstraints", "MediaStreamTrack", "MediaStreamTrackGenerator", "MediaStreamTrackGeneratorInit", "MessageEvent", "Navigator", "Node", "NodeList", "OffscreenCanvas", "OffscreenCanvasRenderingContext2d", "PointerEvent", "RequestInit", "ResizeObserver", "Response", "RtcConfiguration", "RtcDataChannel", "RtcDataChannelState", "RtcDataChannelType", "RtcIceConnectionState", "RtcIceGatheringState", "RtcIceServer", "RtcPeerConnection", "RtcPeerConnectionState", "RtcRtpReceiver", "RtcRtpTransceiver", "RtcRtpTransceiverDirection", "RtcRtpTransceiverInit", "RtcSdpType", "RtcSessionDescription", "RtcSessionDescriptionInit", "StorageManager", "SubtleCrypto", "UiEvent", "Usb", "UsbAlternateInterface", "UsbConfiguration", "UsbConnectionEvent", "UsbDevice", "UsbDeviceFilter", "UsbDeviceRequestOptions", "UsbDirection", "UsbEndpoint", "UsbEndpointType", "UsbInTransferResult", "UsbInterface", "UsbOutTransferResult", "UsbTransferStatus", "VideoColorPrimaries", "VideoColorSpaceInit", "VideoDecoder", "VideoDecoderConfig", "VideoDecoderInit", "VideoEncoder", "VideoEncoderConfig", "VideoEncoderEncodeOptions", "VideoEncoderInit", "VideoFrame", "VideoFrameInit", "VideoMatrixCoefficients", "VideoTransferCharacteristics", "Url", "WheelEvent", "Worker", "WritableStream", "WritableStreamDefaultWriter"] }
+workspace-hack = { version = "0.1", path = "../workspace-hack" }

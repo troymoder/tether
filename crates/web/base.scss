@@ -1,0 +1,151 @@
+:root {
+	color-scheme: dark;
+	/* Until the page has measured itself (src/app/panel.rs). */
+	--p: min(90vw, max(560px, 100vw - 440px));
+	--dev: min(100vw, 440px);
+	--sans: Inter, system-ui, sans-serif;
+	--mono: "JetBrains Mono", ui-monospace, monospace;
+	--bg: #121212;
+	--surface: #1a1a1a;
+	--raised: #0c0c0c;
+	--chosen: #2a2a2a;
+	--screen: #1f1f1f;
+	--line: #333333;
+	--text: #e6e6e6;
+	--muted: #9a9a9a;
+	--accent: #6ea8ff;
+	--accent-fill: #2f6fd6;
+	--on-accent: #ffffff;
+	--ok: #3fb950;
+	--warn: #e3b341;
+	--bad: #ff6b63;
+	--fill: var(--surface);
+}
+
+:root[data-theme="light"] {
+	color-scheme: light;
+	--bg: #f5f5f5;
+	--surface: #ffffff;
+	--raised: #ebebeb;
+	--chosen: #e4e4e4;
+	--screen: #dedede;
+	--line: #cfcfcf;
+	--text: #1a1a1a;
+	--muted: #5c5c5c;
+	--accent: #1f5fbf;
+	--accent-fill: #1f5fbf;
+	--on-accent: #ffffff;
+	--ok: #1a7f37;
+	--warn: #8a5a00;
+	--bad: #c62828;
+}
+
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme="dark"]) {
+		color-scheme: light;
+		--bg: #f5f5f5;
+		--surface: #ffffff;
+		--raised: #ebebeb;
+		--chosen: #e4e4e4;
+		--screen: #dedede;
+		--line: #cfcfcf;
+		--text: #1a1a1a;
+		--muted: #5c5c5c;
+		--accent: #1f5fbf;
+		--accent-fill: #1f5fbf;
+		--on-accent: #ffffff;
+		--ok: #1a7f37;
+		--warn: #8a5a00;
+		--bad: #c62828;
+	}
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font: 14px/1.4 var(--sans);
+	overflow: hidden;
+}
+
+input:not([type="checkbox"]) {
+	padding: 6px 12px;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	background: var(--surface);
+	color: inherit;
+	font: inherit;
+}
+
+textarea {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	background: var(--surface);
+	color: inherit;
+	font: 12px/1.5 var(--mono);
+	resize: vertical;
+}
+
+svg {
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.75;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* As tall as a button, so that a view's name sits at the same place with or
+   without buttons beside it. */
+h1 {
+	flex: none;
+	min-height: 36px;
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.2;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+}
+
+h2 {
+	margin: 20px 0 10px;
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 500;
+}
+
+@keyframes pulse {
+	50% {
+		background-color: color-mix(in srgb, var(--warn) 45%, var(--bg));
+	}
+}
+
+@keyframes across {
+	from {
+		background-position: -30px 0;
+	}
+
+	to {
+		background-position: 96px 0;
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes pulse-text {
+	50% {
+		opacity: 0.45;
+	}
+}
