@@ -1,0 +1,760 @@
+@mixin unusable {
+	opacity: 0.45;
+	cursor: default;
+}
+
+.view {
+	/* A set height, since the stage under it measures what is on it against
+	   its own height. A least height would give it none to measure. */
+	height: 100%;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	h1 {
+		margin: 0;
+	}
+
+	.lenses {
+		flex: 0 1 150px;
+		min-width: 0;
+
+		button {
+			flex: 1 1 0;
+			min-width: 0;
+			padding: 0;
+		}
+	}
+
+	.live {
+		border-color: var(--bad);
+		color: var(--bad);
+		white-space: nowrap;
+
+		> span {
+			width: 8px;
+			height: 8px;
+			border-radius: 4px;
+		}
+	}
+
+	/* As tall whatever it says. */
+	.under {
+		flex: none;
+		min-height: 18px;
+		color: var(--muted);
+		font-size: $text-small;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+
+		span,
+		code {
+			@include truncated;
+		}
+
+		span {
+			flex: 0 1 auto;
+		}
+
+		code {
+			flex: 0 9999 auto;
+			font: $text-small $mono;
+		}
+	}
+}
+
+.bar {
+	flex: none;
+	position: relative;
+	display: block;
+
+	&.held {
+		height: $control;
+		box-sizing: border-box;
+		padding: 0 3px 0 10px;
+		border: 1px solid var(--line);
+		border-radius: $radius;
+		background: var(--surface);
+		font-size: 13px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.mark {
+		flex: none;
+		width: 8px;
+		height: 8px;
+		background: var(--warn);
+	}
+
+	&.lost .mark {
+		background: var(--bad);
+	}
+
+	.holder {
+		flex: 1;
+		@include truncated;
+	}
+
+	.take {
+		flex: none;
+		height: 26px;
+		padding: 0 10px;
+		font-size: $text-small;
+	}
+}
+
+.source {
+	all: unset;
+	box-sizing: border-box;
+	width: 100%;
+	height: $control;
+	padding: 0 10px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	color: var(--text);
+	font-size: 13px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	&:hover,
+	&[aria-expanded="true"] {
+		background: var(--chosen);
+	}
+
+	svg {
+		flex: none;
+		width: 14px;
+		height: 14px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.75;
+		stroke-linejoin: round;
+		color: var(--muted);
+	}
+}
+
+.muted {
+	flex: none;
+	font-size: $text-small;
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+.what {
+	flex: 1;
+	min-width: 0;
+	@include truncated;
+}
+
+/* The list of sources sets the box's height. The settings fill that and
+   scroll inside it, and go under the list where the box is narrow. */
+.sources {
+	position: absolute;
+	top: calc($control + 4px);
+	left: 0;
+	right: 0;
+	z-index: 4;
+	box-sizing: border-box;
+	container: srcbox / inline-size;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	color: var(--text);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+}
+
+.kinds {
+	flex: 1 1 240px;
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+	padding: 3px;
+	border-right: 1px solid var(--line);
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+
+	> button {
+		all: unset;
+		box-sizing: border-box;
+		height: 34px;
+		padding: 0 8px;
+		border-radius: 3px;
+		font-size: 13px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		&:hover,
+		&[aria-selected="true"] {
+			background: var(--chosen);
+		}
+
+		> span:nth-of-type(2) {
+			flex: none;
+			white-space: nowrap;
+		}
+
+		svg {
+			flex: none;
+			width: 14px;
+			height: 14px;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.75;
+			stroke-linejoin: round;
+			color: var(--muted);
+		}
+	}
+}
+
+.dot {
+	flex: none;
+	box-sizing: border-box;
+	width: 12px;
+	height: 12px;
+	border: 1px solid var(--muted);
+	border-radius: 6px;
+
+	[aria-selected="true"] > & {
+		border: 4px solid var(--accent);
+	}
+}
+
+.note {
+	flex: 1;
+	min-width: 0;
+	text-align: right;
+	font-size: $text-small;
+	color: var(--muted);
+	@include truncated;
+}
+
+.group {
+	padding: 6px 8px 2px;
+	font-size: $text-caption;
+	color: var(--muted);
+}
+
+.settings {
+	flex: 999 1 280px;
+	min-width: 0;
+	contain: size;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: thin;
+	scrollbar-color: var(--line) transparent;
+	box-sizing: border-box;
+	padding: 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+@container srcbox (width < 522px) {
+	.settings {
+		min-height: 320px;
+	}
+}
+
+.heading {
+	padding: 4px 8px 2px;
+	font-size: $text-caption;
+	color: var(--muted);
+}
+
+.field {
+	position: relative;
+	padding: 0 8px 4px;
+}
+
+.rule {
+	flex: none;
+	height: 1px;
+	margin: 3px 0;
+	background: var(--line);
+}
+
+.said {
+	padding: 8px;
+	font-size: 13px;
+	color: var(--muted);
+
+	&.bad {
+		color: var(--bad);
+	}
+}
+
+.picked {
+	padding: 4px 4px 4px 8px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+
+	> span {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+
+		> span:first-child {
+			font-size: $text-caption;
+			color: var(--muted);
+		}
+
+		> span:last-child {
+			font-size: 13px;
+			@include truncated;
+		}
+	}
+}
+
+.files {
+	flex: 1 1 0;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: thin;
+	scrollbar-color: var(--line) transparent;
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+
+.file {
+	all: unset;
+	flex: none;
+	box-sizing: border-box;
+	height: 40px;
+	padding: 0 8px;
+	border-radius: 3px;
+	font-size: 13px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	&:hover,
+	&[aria-selected="true"] {
+		background: var(--chosen);
+	}
+
+	svg {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.75;
+		stroke-linejoin: round;
+		color: var(--muted);
+	}
+
+	> span {
+		flex: 1;
+		min-width: 0;
+		@include truncated;
+	}
+
+	> code {
+		flex: none;
+		font: $text-caption $mono;
+		color: var(--muted);
+	}
+}
+
+.lossless {
+	all: unset;
+	flex: none;
+	box-sizing: border-box;
+	height: 34px;
+	padding: 0 8px;
+	border-radius: 3px;
+	font-size: 13px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	&:hover {
+		background: var(--chosen);
+	}
+
+	> span:nth-of-type(2) {
+		flex: 1;
+	}
+
+	.note {
+		flex: none;
+	}
+}
+
+.check {
+	flex: none;
+	box-sizing: border-box;
+	width: 14px;
+	height: 14px;
+	border: 1px solid var(--muted);
+	border-radius: 2px;
+	display: grid;
+	place-items: center;
+	color: var(--on-accent);
+
+	svg {
+		width: 10px;
+		height: 10px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 3;
+		visibility: hidden;
+	}
+
+	[aria-checked="true"] > & {
+		border-color: var(--accent);
+		background: var(--accent-fill);
+
+		svg {
+			visibility: visible;
+		}
+	}
+}
+
+/* The bottom padding is room for the buttons on the stage. */
+.stage {
+	position: relative;
+	flex: 1;
+	box-sizing: border-box;
+	min-height: 260px;
+	padding: 8px 8px 56px;
+	border: 1px solid var(--line);
+	border-radius: $radius-box;
+	background: var(--surface);
+	color: var(--muted);
+	font-size: $text-small;
+	container-type: size;
+	display: grid;
+	place-items: center;
+
+	&.plain {
+		padding-bottom: 8px;
+	}
+
+	.blank {
+		width: min(100cqw, calc(100cqh * 16 / 9));
+		aspect-ratio: 16 / 9;
+		cursor: default;
+		display: grid;
+		place-items: center;
+		text-align: center;
+	}
+}
+
+.mirrored,
+.saying {
+	grid-area: 1 / 1;
+}
+
+.mirrored {
+	width: 100cqw;
+	height: 100cqh;
+	object-fit: contain;
+
+	&.sideways {
+		width: 100cqh;
+		height: 100cqw;
+	}
+}
+
+.saying {
+	padding: 4px 8px;
+	border-radius: $radius;
+	background: var(--bg);
+}
+
+/* With few cameras the settings are as tall as they need, and the list of
+   sizes hangs over what is under the box. */
+.pick {
+	position: relative;
+	flex: 0 1 260px;
+	min-width: 0;
+
+	> .source {
+		height: 30px;
+		font-size: $text-small;
+	}
+
+	.sources {
+		left: auto;
+		top: 34px;
+		width: min(560px, 86cqw);
+		box-shadow: 0 6px 20px rgb(0 0 0 / 35%);
+	}
+
+	.kinds > button > .note {
+		flex: 1;
+	}
+
+	.settings {
+		contain: none;
+		overflow: visible;
+	}
+
+	.rates {
+		padding-bottom: 6px;
+	}
+}
+
+.picked .again {
+	flex: none;
+	height: 30px;
+	padding: 0 12px;
+	font-size: $text-small;
+}
+
+/* The digits of a size have nothing below the line, so the line is cut to
+   them to stand in the middle of the field. They reach a little past the
+   cut line, so the overflow is left visible. A size is never long enough
+   to need cutting short. */
+.size > button {
+	font: $text-small $mono;
+
+	> span:first-of-type {
+		overflow: visible;
+		text-box: trim-both cap alphabetic;
+	}
+}
+
+.tools {
+	> .lock {
+		width: auto;
+		padding: 0 8px;
+		gap: 6px;
+		font-size: $text-small;
+		display: flex;
+		align-items: center;
+
+		&[aria-checked="true"] {
+			background: var(--chosen);
+			color: var(--accent);
+		}
+	}
+
+	> .torch[aria-checked="true"]:not(:disabled) {
+		background: var(--chosen);
+		color: var(--warn);
+	}
+}
+
+@container (width < 340px) {
+	.orientation {
+		display: none;
+	}
+}
+
+.zoom_row {
+	flex: none;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	> code {
+		flex: none;
+		min-width: 44px;
+		text-align: right;
+		font: $text-small $mono;
+		color: var(--text);
+	}
+}
+
+.zoom_bar {
+	position: relative;
+	flex: 1;
+	min-width: 0;
+	height: 30px;
+	box-sizing: border-box;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	overflow: hidden;
+	container: zbar / inline-size;
+	cursor: ew-resize;
+	touch-action: none;
+	user-select: none;
+
+	/* For arrow keys and screen readers only. */
+	input {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+.zoom_fill {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	background: color-mix(in srgb, var(--accent) 18%, transparent);
+	pointer-events: none;
+}
+
+.zoom_mark {
+	position: absolute;
+	top: 3px;
+	bottom: 3px;
+	width: 2px;
+	background: var(--accent);
+	pointer-events: none;
+}
+
+.zoom_stop {
+	position: absolute;
+	z-index: 1;
+	top: 4px;
+	height: 20px;
+	padding: 0 5px;
+	border-radius: 3px;
+	font: $text-caption $mono;
+	color: var(--muted);
+	pointer-events: none;
+	display: grid;
+	place-items: center;
+
+	&.on {
+		background: var(--accent-fill);
+		color: var(--on-accent);
+	}
+}
+
+/* As the bar narrows, the stops least needed go first. */
+@container zbar (width < 400px) {
+	.zoom_first {
+		display: none;
+	}
+}
+
+@container zbar (width < 260px) {
+	.zoom_then {
+		display: none;
+	}
+}
+
+@container zbar (width < 150px) {
+	.zoom_ends {
+		display: none;
+	}
+}
+
+.pad {
+	position: relative;
+	flex: none;
+	box-sizing: border-box;
+	border: 1px dashed var(--line);
+	cursor: move;
+	touch-action: none;
+
+	video,
+	img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		object-fit: fill;
+		pointer-events: none;
+	}
+}
+
+.seen {
+	position: absolute;
+	box-sizing: border-box;
+	border: 2px solid var(--accent);
+	pointer-events: none;
+
+	span {
+		position: absolute;
+		top: 0;
+		left: 0;
+		box-sizing: border-box;
+		max-width: 100%;
+		padding: 2px 5px;
+		background: var(--accent-fill);
+		color: var(--on-accent);
+		font-size: $text-caption;
+		line-height: 1.3;
+		@include truncated;
+	}
+
+	button {
+		position: absolute;
+		right: -7px;
+		bottom: -7px;
+		box-sizing: border-box;
+		width: 14px;
+		height: 14px;
+		padding: 0;
+		border: 2px solid var(--accent);
+		border-radius: 0;
+		background: var(--bg);
+		cursor: nwse-resize;
+		touch-action: none;
+		pointer-events: auto;
+	}
+}
+
+.tools {
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 3px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--bg);
+	display: flex;
+	align-items: center;
+	gap: 2px;
+
+	> button {
+		width: 30px;
+		height: 30px;
+		padding: 7px;
+		color: var(--muted);
+
+		&[aria-pressed="true"]:not(:disabled) {
+			color: var(--text);
+		}
+
+		&:disabled {
+			@include unusable;
+		}
+	}
+
+	code {
+		min-width: 38px;
+		color: var(--text);
+		font: $text-small $mono;
+		text-align: center;
+	}
+
+	.rule {
+		width: 1px;
+		align-self: stretch;
+		margin: 4px 2px;
+		background: var(--line);
+	}
+}
