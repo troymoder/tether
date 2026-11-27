@@ -4,56 +4,80 @@ A web page for working with mobile devices during development. tetherd runs on t
 Android phones, emulators and iPhones are attached to, and serves a page that shows their screens
 and manages their apps, files, logs and more from any browser.
 
-## Run it
-
-```sh
-nix build
-./result/bin/tetherd <port>
-```
-
-Open `http://localhost:<port>`. The first browser is asked for the setup code tetherd prints.
-
-Building tetherd uses the Android SDK, which is unfree and has a licence. Building from this flake
-directly accepts it.
-
 ## Install it
 
-The flake has two modules, with the same options:
-
-- **`nixosModules.default`** runs one tetherd for the machine, as a system service with its own
-  user. Its setup code is in `journalctl -u tetherd`.
-- **`homeModules.default`** runs one for you, as a user service. Its emulators draw with the GPU
-  through your desktop session.
+tether is a nix flake with a NixOS module and a home-manager module. Add it as an input:
 
 ```nix
-{
-  imports = [tether.nixosModules.default]; # or tether.homeModules.default
+inputs.tether.url = "github:troymoder/tether";
+```
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    android_sdk.accept_license = true;
-  };
+Both modules build tetherd from your `pkgs`. The build uses the Android SDK, which is unfree and has
+a licence, so your nixpkgs config has to accept both:
+
+```nix
+nixpkgs.config = {
+  allowUnfree = true;
+  android_sdk.accept_license = true;
+};
+```
+
+### NixOS
+
+One tetherd for the machine, as a system service with its own user.
+
+```nix
+{inputs, ...}: {
+  imports = [inputs.tether.nixosModules.default];
 
   services.tether = {
     enable = true;
     settings.port = 5175;
+    android.enable = true; # emulators
+    gpu.enable = true; # lets emulators draw with the GPU
   };
 }
 ```
 
-The modules build tetherd from your `pkgs`, so the licence is yours to accept, as above. The same
-goes for `tether.overlays.default`, which adds `pkgs.tetherd`. `tetherd --help` lists the other
-settings.
+Open `http://localhost:5175`. The first browser is asked for a setup code, which is in
+`journalctl -u tetherd`.
 
-- **iPhones** need a udev rule, which takes root. The NixOS service has its own. With home-manager
-  on NixOS, import the NixOS module too and set `hardware.tether.enable` in place of
-  `services.tether`. On another distribution, copy [nix/70-tether.rules](nix/70-tether.rules) to
-  `/etc/udev/rules.d`.
-- **Emulators** are off until `services.tether.android.enable` is set, which gives tetherd an
-  Android SDK with one system image. `services.tether.android.sdk` takes your own. They also need
-  KVM on Linux.
-- **GPU emulators** under the NixOS service need `services.tether.gpu.enable`, which runs a display
-  with no screen for them to draw through. Without it they render in software.
+### home-manager
+
+One tetherd for you, as a user service. Its emulators draw with the GPU through your desktop
+session.
+
+```nix
+{inputs, ...}: {
+  imports = [inputs.tether.homeModules.default];
+
+  services.tether = {
+    enable = true;
+    settings.port = 5175;
+    android.enable = true; # emulators
+  };
+}
+```
+
+The setup code is in `journalctl --user -u tetherd`.
+
+iPhones need a udev rule, which home-manager cannot install. On NixOS, import the NixOS module too
+and set `hardware.tether.enable = true`. On another distribution, copy
+[nix/70-tether.rules](nix/70-tether.rules) to `/etc/udev/rules.d`.
+
+### Options
+
+| Option                           | What it does                                                         |
+| -------------------------------- | -------------------------------------------------------------------- |
+| `services.tether.enable`         | Runs tetherd.                                                        |
+| `services.tether.settings`       | tetherd's settings. `port` is required. `tetherd --help` lists them. |
+| `services.tether.android.enable` | Turns emulators on, with an Android SDK. They need KVM on Linux.     |
+| `services.tether.android.sdk`    | The SDK to use, for other system images than the default one.        |
+| `services.tether.gpu.enable`     | NixOS only. A display with no screen, so emulators can use the GPU.  |
+| `services.tether.package`        | The tetherd to run.                                                  |
+| `hardware.tether.enable`         | NixOS only. The iPhone udev rule, for a tetherd a user runs.         |
+
+`inputs.tether.overlays.default` adds `pkgs.tetherd`, for running it some other way.
 
 ## Work on it
 
@@ -68,6 +92,10 @@ just dev up web
 - [Architecture](docs/architecture.md): the parts and how they talk.
 - [Development](docs/development.md): the dev loop, tests and builds.
 - [Conventions](AGENTS.md): code style, comments, docs and commits.
+
+## AI in development
+
+tether was partly developed using AI. While tether was my first project where I decieded to lean more heavily into AI coding agents. I had never "vibe-coded" before and I have a lot to say about the quaility of their output. Blog post soon (tm).
 
 ## Licence
 

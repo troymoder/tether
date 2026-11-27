@@ -35,12 +35,7 @@ The page only builds for WebAssembly, so its tests are the Playwright suite in
 `just check` is `nix flake check`, which also runs clippy, TypeScript and the lock file checks. Run
 one check with `nix build .#checks.<system>.<name>`.
 
-## Building
-
-```sh
-nix build
-./result/bin/tetherd <port>
-```
+## The Android SDK's licence
 
 The flake's own outputs accept the Android SDK's licence. The modules and the overlay build from the
 `pkgs` of whoever uses them, so they accept it in their own nixpkgs config.
