@@ -1,0 +1,157 @@
+.map {
+	position: absolute;
+	inset: 0;
+	height: auto;
+	border: 0;
+	border-radius: 0;
+	background: var(--surface);
+	overflow: hidden;
+	cursor: grab;
+	touch-action: none;
+	user-select: none;
+
+	&:active {
+		cursor: grabbing;
+	}
+
+	/* Light tiles of a source marked `darkened` (tiles.rs), inverted into a
+	   dark map. */
+	&.darkened .world img {
+		filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.9);
+	}
+
+	/* The tabs lie over light and dark maps alike, so they have a background
+	   of their own to stay readable. */
+	.kinds {
+		bottom: 28px;
+		left: 12px;
+		border-color: var(--line);
+		background: var(--surface);
+
+		button {
+			color: var(--muted);
+		}
+
+		@include narrower(location) {
+			font-size: $text-caption;
+
+			button {
+				padding: 5px 7px;
+			}
+		}
+
+		button[aria-selected="true"] {
+			background: var(--chosen);
+			color: var(--text);
+		}
+	}
+}
+
+.world {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: 0 0;
+	will-change: transform;
+
+	/* A tile shows once it has loaded, so the farther zoom under it shows
+	   until then. */
+	img {
+		position: absolute;
+		width: 256px;
+		height: 256px;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.12s;
+
+		&[data-come] {
+			opacity: 1;
+		}
+	}
+}
+
+.level {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: 0 0;
+}
+
+.over {
+	position: absolute;
+}
+
+.pin {
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	margin: -7px 0 0 -7px;
+	border: 2px solid var(--bg);
+	background: var(--accent);
+	box-sizing: border-box;
+	cursor: grab;
+}
+
+.kept {
+	position: absolute;
+	width: 0;
+	height: 0;
+	pointer-events: none;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: -7px;
+		left: -7px;
+		width: 14px;
+		height: 14px;
+		border: 2px solid #fff;
+		border-radius: 50%;
+		background: var(--warn);
+		box-sizing: border-box;
+	}
+
+	span {
+		position: absolute;
+		top: 10px;
+		left: 0;
+		padding: 1px 6px;
+		border-radius: $radius;
+		background: var(--surface);
+		color: #fff;
+		font-size: $text-caption;
+		font-weight: 600;
+		white-space: nowrap;
+		transform: translateX(-50%);
+	}
+}
+
+.zoom {
+	right: 12px;
+	bottom: 28px;
+	padding: 3px;
+	border: 1px solid var(--line);
+	border-radius: $radius;
+	background: var(--surface);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+
+	.step {
+		width: $control - 4px;
+		height: $control - 4px;
+		padding: 7px;
+		color: var(--muted);
+	}
+}
+
+.credit {
+	right: 6px;
+	bottom: 4px;
+	padding: 2px 8px;
+	border-radius: $radius;
+	background: color-mix(in srgb, var(--surface) 90%, transparent);
+	color: var(--text);
+	font-size: $text-caption;
+	text-decoration: none;
+}
