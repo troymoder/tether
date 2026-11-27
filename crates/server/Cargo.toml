@@ -1,0 +1,62 @@
+[package]
+name = "tetherd"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+workspace-hack = { version = "0.1", path = "../workspace-hack" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+v4l = "0.14"
+
+# Keeping tetherd's dependencies under this target stops cargo-hakari from
+# unifying its tokio and USB crates into the page's WebAssembly build.
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies]
+adb.workspace = true
+android.workspace = true
+ios.workspace = true
+quicktime.workspace = true
+opus-pure = "0.2.5"
+anyhow = "1"
+axum = "0.8"
+base64 = "0.22"
+clap = { version = "4.6.9", features = ["derive"] }
+config = { version = "0.15.27", default-features = false, features = ["toml"] }
+getrandom = "0.3"
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio", "service"] }
+if-addrs = "0.15"
+jpeg-encoder = "0.7"
+libadb = { version = "0.9", default-features = false, features = ["keys", "split", "tokio", "nusb", "host-keys", "tls", "pairing"] }
+listenfd = "1"
+mdns-sd = "0.22.0"
+memmap2 = "0.9.12"
+nusb = "0.1"
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8"] }
+prost = "0.14"
+protocol.workspace = true
+rustix = { version = "1.1.6", features = ["net", "fs", "time", "process", "std"] }
+sea-orm = { version = "2.0.4", default-features = false, features = ["macros", "sqlx-sqlite", "runtime-tokio"] }
+serde.workspace = true
+serde_json.workspace = true
+sha2 = "0.10"
+str0m = { version = "0.26", default-features = false, features = ["aws-lc-rs"] }
+tokio = { version = "1", features = ["full"] }
+tokio-seqpacket = "0.9.1"
+tonic = { version = "0.14", default-features = false, features = ["channel", "codegen"] }
+tonic-prost = "0.14"
+tower-http = { version = "0.6", features = ["fs"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", default-features = false, features = ["fmt", "env-filter", "ansi", "std"] }
+vcam-wire.workspace = true
+yuv-sys = "0.3"
+zip = { version = "2", default-features = false }
+
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.build-dependencies]
+protox = "0.9"
+tonic-prost-build = "0.14"
