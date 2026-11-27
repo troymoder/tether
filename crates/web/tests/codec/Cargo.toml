@@ -1,0 +1,25 @@
+[package]
+name = "test-codec"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+# Built to WebAssembly with wasm-bindgen for the page's Playwright tests
+# (package.nix), which load it in Node.
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+js-sys = "0.3"
+protocol = { workspace = true, features = ["ts"] }
+rkyv = "0.8"
+serde.workspace = true
+tsify = { version = "0.5", default-features = false, features = ["js"] }
+# Pinned to the page's version, which the wasm-bindgen program in package.nix
+# has to match.
+wasm-bindgen = "=0.2.130"
+workspace-hack = { version = "0.1", path = "../../../workspace-hack" }
